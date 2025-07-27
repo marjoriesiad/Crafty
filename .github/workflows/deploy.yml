@@ -24,7 +24,7 @@ jobs:
       run: |
         ssh root@217.154.120.61 << 'EOF'
           echo "📁 Accès au dossier Crafty"
-          cd ~/crafty || { echo "❌ Dossier non trouvé"; exit 1; }
+          cd ~/skillcraft-stack/crafty || { echo "❌ Dossier non trouvé"; exit 1; }
 
           echo "🔄 Mise à jour du code"
           git pull origin main
