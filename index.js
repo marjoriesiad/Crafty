@@ -97,7 +97,7 @@ process.on('uncaughtException', (error) => {
 // === Démarrage du bot et du serveur ===
 client.login(BOT_CONFIG.BOT_TOKEN)
   .then(() => {
-    app.listen(BOT_CONFIG.EXPRESS_PORT, () => {
+    app.listen(BOT_CONFIG.EXPRESS_PORT,'0.0.0.0', () => {
       console.log(`🌐 Serveur API en écoute sur le port ${BOT_CONFIG.EXPRESS_PORT}`);
       console.log('🤖 Bot Discord prêt pour les notifications de projets !');
       console.log(`🔔 Système de rôles configuré avec l'emoji ${ROLE_CONFIG.REACTION_EMOJI}`);

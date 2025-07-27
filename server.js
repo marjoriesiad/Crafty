@@ -292,7 +292,7 @@ client.on('error', (error) => {
 // Lance le serveur HTTP + le bot
 client.login(process.env.DISCORD_TOKEN)
   .then(() => {
-    app.listen(3001, () => {
+    app.listen(3001, '0.0.0.0', () => {
       console.log('🌐 Serveur API de Crafty en écoute sur le port 3001');
       console.log('🤖 Bot Discord Crafty prêt !');
     });
