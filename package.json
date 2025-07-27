@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "deploy": "node deploy-commands.js",
+    "test": "node -c index.js && echo \"✅ Syntax check passed\"",
+    "dev": "node index.js"
   },
   "keywords": [],
   "author": "",

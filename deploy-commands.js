@@ -1,28 +1,25 @@
 // deploy-commands.js
-const { REST, Routes, SlashCommandBuilder } = require('discord.js');
+const { REST, Routes } = require('discord.js');
+const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 
-const commands = [
-  // Commande existante
-  new SlashCommandBuilder()
-    .setName('infos')
-    .setDescription('Affiche les stats du site SkillCraft')
-    .toJSON(),
-    
-  // ✨ NOUVELLE COMMANDE pour setup des rôles
-  new SlashCommandBuilder()
-    .setName('setup-roles')
-    .setDescription('Créer le message de rôle pour les notifications de projets')
-    .setDefaultMemberPermissions('0') // Seuls les admins peuvent utiliser cette commande
-    .toJSON(),
+// Charger automatiquement toutes les commandes depuis le dossier commands
+const commands = [];
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
-  // ✨ NOUVELLE COMMANDE pour obtenir des infos sur les rôles
-  new SlashCommandBuilder()
-    .setName('role-stats')
-    .setDescription('Affiche les statistiques du système de rôles')
-    .setDefaultMemberPermissions('0') // Admin seulement
-    .toJSON()
-];
+for (const file of commandFiles) {
+  const filePath = path.join(commandsPath, file);
+  const command = require(filePath);
+  
+  if ('data' in command && 'execute' in command) {
+    commands.push(command.data.toJSON());
+    console.log(`✅ Commande chargée: ${command.data.name}`);
+  } else {
+    console.log(`⚠️ Commande manquante propriété "data" ou "execute": ${file}`);
+  }
+}
 
 const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN);
 
