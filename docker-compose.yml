@@ -10,3 +10,5 @@ services:
     volumes:
       - .:/app
     command: npm run start
+    ports: 
+      - "3001:3001"
