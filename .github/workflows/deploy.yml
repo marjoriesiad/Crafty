@@ -10,21 +10,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Cloner le repo
+    - name: 📦 Cloner le dépôt
       uses: actions/checkout@v3
 
-    - name: Préparer la clé SSH
+    - name: 🔐 Préparer la clé SSH
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
+        echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -H 217.154.120.61 >> ~/.ssh/known_hosts
 
-    - name: Se connecter au VPS et déployer Crafty
+    - name: 🚀 Connexion au VPS et déploiement
       run: |
         ssh root@217.154.120.61 << 'EOF'
-          cd ~/skillcraft-stack/crafty
+          echo "📁 Accès au dossier Crafty"
+          cd ~/crafty || { echo "❌ Dossier non trouvé"; exit 1; }
+
+          echo "🔄 Mise à jour du code"
           git pull origin main
+
+          echo "🧱 Rebuild avec Docker"
           docker compose down
           docker compose up -d --build
+
+          echo "✅ Déploiement terminé"
         EOF
