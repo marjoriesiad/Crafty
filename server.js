@@ -290,7 +290,7 @@ client.on('error', (error) => {
 });
 
 // Lance le serveur HTTP + le bot
-client.login(process.env.DISCORD_TOKEN)
+client.login(process.env.BOT_TOKEN)
   .then(() => {
     app.listen(3001, '0.0.0.0', () => {
       console.log('🌐 Serveur API de Crafty en écoute sur le port 3001');
