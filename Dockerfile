@@ -32,4 +32,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     req.end();"
 
 # Start the bot server
-CMD ["node", "server.js"]
+CMD ["node", "index.js"]
