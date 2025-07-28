@@ -1,20 +1,21 @@
-# Utilise une image Node officielle
-FROM node:18
+FROM node:18-alpine
 
-# Crée un dossier dans le conteneur pour ton bot
 WORKDIR /app
 
-# Copie les fichiers de dépendances
+# Copy package files
 COPY package*.json ./
 
-# Installe les dépendances
-RUN npm install
+# Install dependencies
+RUN npm ci --only=production
 
-# Copie tout le reste
+# Copy source code
 COPY . .
 
-# Ajoute les variables d'environnement
-ENV NODE_ENV=production
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S crafty -u 1001
+RUN chown -R crafty:nodejs /app
+USER crafty
 
-# Lance le bot
-CMD ["npm", "run", "start"]
+# Start the bot - changez "server.js" par votre fichier principal si différent
+CMD ["node", "server.js"]
