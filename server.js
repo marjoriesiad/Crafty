@@ -275,6 +275,79 @@ app.post('/announce-project-update', authenticateRequest, async (req, res) => {
   }
 });
 
+// ROUTE pour recevoir les notifications de backup depuis Dokploy
+app.post('/backup-notification', authenticateRequest, async (req, res) => {
+  try {
+    const { status, dbName, timestamp, error } = req.body;
+    
+    if (!status) {
+      return res.status(400).json({ error: 'Statut du backup requis' });
+    }
+
+    const channelId = process.env.BACKUP_NOTIFICATION_CHANNEL_ID || process.env.PROJECT_ANNOUNCE_CHANNEL_ID;
+    const channel = await client.channels.fetch(channelId);
+
+    if (!channel) {
+      return res.status(404).json({ error: 'Salon Discord non trouvé' });
+    }
+
+    // Créer l'embed selon le statut
+    const embed = new EmbedBuilder()
+      .setTimestamp(timestamp ? new Date(timestamp) : new Date());
+
+    if (status === 'success') {
+      embed
+        .setTitle('✅ Backup Base de Données Réussi')
+        .setDescription(`La sauvegarde de la base de données${dbName ? ` **${dbName}**` : ''} a été effectuée avec succès.`)
+        .setColor(0x2ecc71); // Vert
+
+      if (dbName) {
+        embed.addFields({
+          name: '🗄️ Base de données',
+          value: dbName,
+          inline: true
+        });
+      }
+    } else if (status === 'error') {
+      embed
+        .setTitle('❌ Échec du Backup Base de Données')
+        .setDescription(`La sauvegarde de la base de données${dbName ? ` **${dbName}**` : ''} a échoué.`)
+        .setColor(0xe74c3c); // Rouge
+
+      if (dbName) {
+        embed.addFields({
+          name: '🗄️ Base de données',
+          value: dbName,
+          inline: true
+        });
+      }
+
+      if (error) {
+        embed.addFields({
+          name: '⚠️ Erreur',
+          value: error.substring(0, 1000), // Limiter la longueur
+          inline: false
+        });
+      }
+    }
+
+    await channel.send({ embeds: [embed] });
+
+    console.log(`✅ Notification de backup envoyée: ${status}`);
+    res.status(200).json({ 
+      success: true, 
+      message: 'Notification envoyée avec succès' 
+    });
+
+  } catch (error) {
+    console.error('❌ Erreur lors de la notification de backup:', error);
+    res.status(500).json({ 
+      error: 'Erreur interne du serveur',
+      details: error.message 
+    });
+  }
+});
+
 // Route de test pour vérifier que le bot fonctionne
 app.get('/test', (req, res) => {
   res.json({ 
