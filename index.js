@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { Client } = require('discord.js');
+const { Client, EmbedBuilder } = require('discord.js');
 const path = require('path');
 require('dotenv').config();
 
@@ -15,6 +15,7 @@ const ProjectService = require('./services/projectService');
 // Utility imports
 const CommandHandler = require('./utils/commandHandler');
 const ReactionHandler = require('./events/reactionHandler');
+const { authenticateRequest } = require('./utils/auth');
 
 // Route imports
 const createProjectRoutes = require('./routes/projectRoutes');
