@@ -73,7 +73,7 @@ client.once('ready', async () => {
           return res.status(400).json({ error: 'Statut du backup requis' });
         }
 
-        const channelId = process.env.BACKUP_NOTIFICATION_CHANNEL_ID || process.env.PROJECT_ANNOUNCE_CHANNEL_ID;
+        const channelId = '1399513064025620550';
         const channel = await client.channels.fetch(channelId);
 
         if (!channel) {
