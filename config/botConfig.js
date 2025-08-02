@@ -8,7 +8,8 @@ const BOT_CONFIG = {
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildMessageReactions, // Pour les réactions
-    GatewayIntentBits.GuildMembers // Pour gérer les rôles
+    GatewayIntentBits.GuildMembers, // Pour gérer les rôles
+    GatewayIntentBits.GuildPresences // Pour voir les statuts en ligne/hors ligne
   ],
   
   // Configuration du serveur Express
